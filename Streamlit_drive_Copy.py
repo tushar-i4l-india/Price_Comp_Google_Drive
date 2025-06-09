@@ -10,19 +10,25 @@ import plotly.express as px
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import streamlit.components.v1 as components
-from dotenv import load_dotenv  # ✅ Load env from .env file
+import ast
+# from dotenv import load_dotenv  # ✅ Load env from .env file
 
-# --- Load environment variables from .env file ---
-load_dotenv()
+st.set_page_config(page_title="Competitor Price Comparison Dashboard", layout="wide", menu_items={'Get Help': 'https://insulation4less.co.uk/pages/contact-us',
+    'Report a bug': "https://www.insulation4less.co.uk",
+    'About': "This app is a price comparison dashboard"})
+# # --- Load environment variables from .env file ---
+# load_dotenv()
 
 # --- GOOGLE DRIVE AUTHENTICATION USING ENV VARIABLE ---
-SERVICE_ACCOUNT_JSON = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
+# SERVICE_ACCOUNT_JSON = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
+raw_secret = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+SERVICE_ACCOUNT_JSON = json.loads(ast.literal_eval(f"'''{raw_secret}'''"))
 creds = service_account.Credentials.from_service_account_info(
     SERVICE_ACCOUNT_JSON,
     scopes=["https://www.googleapis.com/auth/drive.readonly"]
 )
 drive_service = build('drive', 'v3', credentials=creds)
-
+st.text("✅ Secret loaded: " + str(bool(os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"))))
 # --- HELPER FUNCTION: Get Folder ID by Name ---
 def get_folder_id(folder_name):
     query = f"name = '{folder_name}' and mimeType = 'application/vnd.google-apps.folder'"
@@ -57,9 +63,7 @@ def extract_price(price):
     return None
 
 # --- STREAMLIT UI ---
-st.set_page_config(page_title="Competitor Price Comparison Dashboard", layout="wide", menu_items={'Get Help': 'https://insulation4less.co.uk/pages/contact-us',
-    'Report a bug': "https://www.insulation4less.co.uk",
-    'About': "This app is a price comparison dashboard"})
+
 
 if 'selected_brand' not in st.session_state:
     st.session_state.selected_brand = None
