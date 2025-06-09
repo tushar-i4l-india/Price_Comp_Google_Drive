@@ -11,13 +11,10 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import streamlit.components.v1 as components
 import ast
-# from dotenv import load_dotenv  # ✅ Load env from .env file
 
 st.set_page_config(page_title="Competitor Price Comparison Dashboard", layout="wide", menu_items={'Get Help': 'https://insulation4less.co.uk/pages/contact-us',
     'Report a bug': "https://www.insulation4less.co.uk",
     'About': "This app is a price comparison dashboard"})
-# # --- Load environment variables from .env file ---
-# load_dotenv()
 
 # --- GOOGLE DRIVE AUTHENTICATION USING ENV VARIABLE ---
 # SERVICE_ACCOUNT_JSON = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
@@ -28,7 +25,6 @@ creds = service_account.Credentials.from_service_account_info(
     scopes=["https://www.googleapis.com/auth/drive.readonly"]
 )
 drive_service = build('drive', 'v3', credentials=creds)
-st.text("✅ Secret loaded: " + str(bool(os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON"))))
 # --- HELPER FUNCTION: Get Folder ID by Name ---
 def get_folder_id(folder_name):
     query = f"name = '{folder_name}' and mimeType = 'application/vnd.google-apps.folder'"
@@ -113,18 +109,18 @@ if st.session_state.selected_brand:
                             for column in melted_data.columns:
                                 if 'Price' in column:
                                     melted_data[column] = melted_data[column].astype(str).apply(extract_price)
-                            melted_data = melted_data.dropna(subset=["Price"])
-                            melted_data.sort_values(by="Price", ascending=True, inplace=True)
-                            st.write(f"Showing price comparison for `{st.session_state.selected_product}`:")
-                            fig = px.bar(
-                                melted_data,
-                                x="Competitor",
-                                y="Price",
-                                color="Competitor",
-                                title=f"Price Comparison for {st.session_state.selected_product}",
-                                text="Price"
-                            )
-                            st.plotly_chart(fig)
+                                    melted_data = melted_data.dropna(subset=["Price"])
+                                    melted_data.sort_values(by="Price", ascending=True, inplace=True)
+                                    st.write(f"Showing price comparison for `{st.session_state.selected_product}`:")
+                                    fig = px.bar(
+                                        melted_data,
+                                        x="Competitor",
+                                        y="Price",
+                                        color="Competitor",
+                                        title=f"Price Comparison for {st.session_state.selected_product}",
+                                        text="Price"
+                                    )
+                                    st.plotly_chart(fig)
                 else:
                     st.error("File not found for the selected date.")
             else:
