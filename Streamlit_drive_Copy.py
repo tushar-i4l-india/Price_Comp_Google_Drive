@@ -10,10 +10,10 @@ import plotly.express as px
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 import streamlit.components.v1 as components
-from dotenv import load_dotenv  # ✅ Load env from .env file
+# from dotenv import load_dotenv  # ✅ Load env from .env file
 
-# --- Load environment variables from .env file ---
-load_dotenv()
+# # --- Load environment variables from .env file ---
+# load_dotenv()
 
 # --- GOOGLE DRIVE AUTHENTICATION USING ENV VARIABLE ---
 SERVICE_ACCOUNT_JSON = json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])
