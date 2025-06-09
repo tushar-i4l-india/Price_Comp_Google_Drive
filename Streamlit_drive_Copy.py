@@ -2,17 +2,17 @@ import streamlit as st
 import pandas as pd
 from datetime import date, timedelta
 from io import BytesIO
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-import plotly.express as px
-import os
 import json
-import base64
+import os
 import re
 import glob
+import plotly.express as px
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 import streamlit.components.v1 as components
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # ✅ Load env from .env file
 
+# --- Load environment variables from .env file ---
 load_dotenv()
 
 # --- GOOGLE DRIVE AUTHENTICATION USING ENV VARIABLE ---
@@ -60,7 +60,7 @@ def extract_price(price):
 st.set_page_config(page_title="Competitor Price Comparison Dashboard", layout="wide", menu_items={'Get Help': 'https://insulation4less.co.uk/pages/contact-us',
     'Report a bug': "https://www.insulation4less.co.uk",
     'About': "This app is a price comparison dashboard"})
-# Initialize session state
+
 if 'selected_brand' not in st.session_state:
     st.session_state.selected_brand = None
 if 'selected_date' not in st.session_state:
@@ -70,7 +70,7 @@ if 'data_loaded' not in st.session_state:
 if 'selected_product' not in st.session_state:
     st.session_state.selected_product = None
 
-st.title("📁 Price Comp Dashboard (Google Drive)")
+st.title("\U0001F4C1 Price Comp Dashboard (Google Drive)")
 col1, col2 = st.columns(2)
 with col1:
     brands = ["Celotex", "Recticel"]
@@ -78,10 +78,10 @@ with col1:
 
 preview_button = st.button("Preview Data")
 if st.session_state.selected_brand:
-    
     with col2:
         selected_date = st.date_input("Select Date", value=date.today())
         st.session_state.selected_date = selected_date.strftime("%d-%m-%Y")
+
     if st.session_state.selected_date:
         expected_file_name = f"{st.session_state.selected_brand}_Prices_{st.session_state.selected_date}.xlsx"
         if preview_button or st.session_state.data_loaded:
@@ -91,17 +91,15 @@ if st.session_state.selected_brand:
             if folder_id:
                 file_id = get_file_id_in_folder(folder_id, expected_file_name)
                 if file_id:
-                    # Download file
                     request = drive_service.files().get_media(fileId=file_id)
                     file_data = BytesIO()
                     downloader = request.execute()
                     file_data.write(downloader)
                     file_data.seek(0)
                     df = load_data(file_data)
-                    # st.session_state.df = df
                     st.success(f"Successfully loaded: {expected_file_name}")
                     st.dataframe(df)
-                    # --- Product Selection for charts ----
+
                     products = df["Product"].unique()
                     st.session_state.selected_product = st.selectbox("Select Product", products)
                     if st.session_state.selected_product:
@@ -123,10 +121,7 @@ if st.session_state.selected_brand:
                                 text="Price"
                             )
                             st.plotly_chart(fig)
-
                 else:
                     st.error("File not found for the selected date.")
             else:
                 st.error(f"{st.session_state.selected_brand} folder not found in Google Drive")
-    
-    
