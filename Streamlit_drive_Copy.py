@@ -19,11 +19,10 @@ st.set_page_config(page_title="Price Comparison Dashboard", page_icon=":bar_char
 })
 
 # --- CONFIGURATION ---
-SERVICE_ACCOUNT_FILE = 'service_account.json'  # Path to your service account JSON key
-
-# --- GOOGLE DRIVE AUTHENTICATION ---
-creds = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE,
+raw_secret = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON")
+SERVICE_ACCOUNT_JSON = json.loads(ast.literal_eval(f"'''{raw_secret}'''"))
+creds = service_account.Credentials.from_service_account_info(
+    SERVICE_ACCOUNT_JSON,
     scopes=["https://www.googleapis.com/auth/drive.readonly"]
 )
 drive_service = build('drive', 'v3', credentials=creds)
