@@ -182,7 +182,7 @@ if st.session_state.selected_brand:
                                     title=f"Price Comparison for {st.session_state.selected_product}",
                                     text="Price"
                                 )
-                                st.plotly_chart(fig)
+                                st.plotly_chart(fig, use_container_width= True)
 
                     # with tab3:
                     #     folder_path = brand_directory
