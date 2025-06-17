@@ -180,7 +180,34 @@ if st.session_state.selected_brand:
                                     y="Price",
                                     color="Competitor",
                                     title=f"Price Comparison for {st.session_state.selected_product}",
-                                    text="Price"
+                                    text="Price",
+                                    color_discrete_sequence=px.colors.qualitative.Prism
+                                )
+                                fig.update_layout(
+                                    title_font_size=22,
+                                    title_font_family="Arial",
+                                    plot_bgcolor="#f9f9f9",
+                                    paper_bgcolor="#f9f9f9",
+                                    font=dict(
+                                        family="Arial",
+                                        size=14,
+                                        color="#333333"
+                                    ),
+                                    xaxis=dict(
+                                        title="Competitor",
+                                        titlefont_size=16,
+                                        tickfont_size=12
+                                    ),
+                                    yaxis=dict(
+                                        title="Price (£)",
+                                        titlefont_size=16,
+                                        tickfont_size=12
+                                    ),
+                                    margin=dict(l=40, r=40, t=60, b=40)
+                                )
+                                fig.update_traces(
+                                    texttemplate='£%{text:.2f}',
+                                    textposition='inside'
                                 )
                                 st.plotly_chart(fig, use_container_width= True)
 
