@@ -158,13 +158,13 @@ if st.session_state.selected_brand:
                             for col in website_columns:
                                 df_display[col] = df_display[col] + " " + df_display[col + "_Arrow"]
                                 df_display.drop(columns=[col + "_Arrow"], inplace=True)
-                            columns_config = {
-                                                "Product": st.column_config.Column("Product", pinned=True),
-                                                "SKU": st.column_config.Column("SKU", pinned=True)
-                                            }
-                            st.dataframe(styled_df, column_config=columns_config, hide_index=True, height=600)
+                            # columns_config = {
+                            #                     "Product": st.column_config.Column("Product", pinned=True),
+                            #                     "SKU": st.column_config.Column("SKU", pinned=True)
+                            #                 }
+                            st.dataframe(styled_df, hide_index=True, height=600)
                         except:
-                            st.dataframe(df,column_config=columns_config, hide_index=True, height=600)
+                            st.dataframe(df, hide_index=True, height=600)
 
                     with tab2:
                         products = df["Product"].unique()
