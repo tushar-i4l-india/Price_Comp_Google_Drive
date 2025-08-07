@@ -104,8 +104,9 @@ if st.session_state.selected_brand:
         st.session_state.selected_date = selected_date.strftime("%d-%m-%Y")
         previous_date_obj = selected_date - timedelta(days=1)
         previous_date = previous_date_obj.strftime("%d-%m-%Y") 
-        
-        folder_id = get_folder_id(st.session_state.selected_brand)
+        folder_name = f"{st.session_state.selected_brand}_Prices"
+        st.session_state.previous_date_str = previous_date
+        folder_id = get_folder_id(folder_name)
         if folder_id:
             expected_file_name = f"{st.session_state.selected_brand}_Prices_{st.session_state.selected_date}.xlsx"
             current_file_id = get_file_id_in_folder(folder_id, expected_file_name)
