@@ -87,7 +87,9 @@ if st.session_state.selected_brand:
         if preview_button or st.session_state.data_loaded:
             st.session_state.data_loaded = True
             st.write(f"Looking for file: `{expected_file_name}` in `{st.session_state.selected_brand}` folder...")
-            folder_id = get_folder_id(st.session_state.selected_brand)
+            folder_name = f"{st.session_state.selected_brand}_Prices"
+            st.session_state.selected_brand = folder_name
+            folder_id = get_folder_id(folder_name)
             if folder_id:
                 file_id = get_file_id_in_folder(folder_id, expected_file_name)
                 if file_id:
