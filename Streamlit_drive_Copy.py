@@ -157,9 +157,13 @@ if st.session_state.selected_brand:
                             for col in website_columns:
                                 df_display[col] = df_display[col] + " " + df_display[col + "_Arrow"]
                                 df_display.drop(columns=[col + "_Arrow"], inplace=True)
-                            st.dataframe(styled_df, hide_index=True, height=600)
+                            columns_config = {
+                                                "Product": st.column_config.Column("Product", pinned=True),
+                                                "SKU": st.column_config.Column("SKU", pinned=True)
+                                            }
+                            st.dataframe(styled_df, column_config=columns_config, hide_index=True, height=600)
                         except:
-                            st.dataframe(df, hide_index=True, height=600)
+                            st.dataframe(df,column_config=columns_config, hide_index=True, height=600)
 
                     with tab2:
                         products = df["Product"].unique()
@@ -236,124 +240,99 @@ if st.session_state.selected_brand:
                     #                       markers=True, labels={"date": "Date", "price_numeric": "Price in £"}, hover_name="product")
                     #         st.plotly_chart(fig)
                 else:
-                    
                     components.html(
-                        """
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <style>
-                        * {box-sizing: border-box;}
-                        body {font-family: Verdana, sans-serif;}
-                        .mySlides {display: none;}
-                        img {vertical-align: middle; width: 100%; border-radius: 10px;}
+                                    """
+                                    <html>
+                                    <head>
+                                    <style>
+                                    .slider-wrapper {
+                                        overflow: hidden;
+                                        width: 100%;
+                                        background: #f0f0f0;
+                                        border-radius: 10px;
+                                        margin: auto;
+                                    }
 
-                        /* Slideshow container */
-                        .slideshow-container {
-                            max-width: 800px;
-                            position: relative;
-                            margin: auto;
-                            padding-top: 40px;
-                        }
+                                    .slider-track {
+                                        display: flex;
+                                        width: calc(600px * 6); /* Adjust based on number of images * image width */
+                                        animation: scroll 10s linear infinite;
+                                    }
 
-                        /* Title text (top of image) */
-                        .title-text {
-                            color: #ffffff;
-                            font-size: 24px;
-                            font-weight: bold;
-                            padding: 12px;
-                            position: absolute;
-                            top: 0;
-                            width: 100%;
-                            text-align: center;
-                            background-color: rgba(0, 0, 0, 0.5);
-                            border-top-left-radius: 10px;
-                            border-top-right-radius: 10px;
-                        }
+                                    .slide {
+                                        flex-shrink: 0;
+                                        width: 600px;
+                                        margin: 10px;
+                                        position: relative;
+                                        border-radius: 10px;
+                                        overflow: hidden;
+                                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                                    }
 
-                        /* Dots */
-                        .dot {
-                            height: 15px;
-                            width: 15px;
-                            margin: 0 2px;
-                            background-color: #bbb;
-                            border-radius: 50%;
-                            display: inline-block;
-                            transition: background-color 0.6s ease;
-                        }
+                                    .slide img {
+                                        width: 100%;
+                                        height: auto;
+                                        border-radius: 10px;
+                                        display: block;
+                                    }
 
-                        .active {
-                            background-color: #717171;
-                        }
+                                    .slide-title {
+                                        position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        padding: 10px;
+                                        background: rgba(0, 0, 0, 0.6);
+                                        color: white;
+                                        text-align: center;
+                                        font-weight: bold;
+                                        font-size: 18px;
+                                    }
 
-                        .fade {
-                            animation-name: fade;
-                            animation-duration: 1.5s;
-                        }
+                                    @keyframes scroll {
+                                        0% { transform: translateX(0); }
+                                        100% { transform: translateX(-50%); } /* Adjust to loop halfway if you duplicate slides */
+                                    }
+                                    </style>
+                                    </head>
+                                    <body>
 
-                        @keyframes fade {
-                            from {opacity: 0.001} 
-                            to {opacity: 1}
-                        }
+                                    <div class="slider-wrapper">
+                                        <div class="slider-track">
+                                            <div class="slide">
+                                                <div class="slide-title">Celotex</div>
+                                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/walls_-_external_wall_insulation_-_timber_frame_walls_1.png?v=1737114043&width=1946">
+                                            </div>
+                                            <div class="slide">
+                                                <div class="slide-title">Recticel</div>
+                                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/Eurothane_20gp_11_1.jpg">
+                                            </div>
+                                            <div class="slide">
+                                                <div class="slide-title">Ecotherm</div>
+                                                <img src="https://build4less.co.uk/cdn/shop/files/Untitleddesign-2024-03-22T094324.755_64d98e44-6e84-46e8-8385-f6acb6837e9f.png?v=1711108001&width=1946">
+                                            </div>
+                                            <!-- Duplicate slides to ensure seamless looping -->
+                                            <div class="slide">
+                                                <div class="slide-title">Celotex</div>
+                                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/walls_-_external_wall_insulation_-_timber_frame_walls_1.png?v=1737114043&width=1946">
+                                            </div>
+                                            <div class="slide">
+                                                <div class="slide-title">Recticel</div>
+                                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/Eurothane_20gp_11_1.jpg">
+                                            </div>
+                                            <div class="slide">
+                                                <div class="slide-title">Ecotherm</div>
+                                                <img src="https://build4less.co.uk/cdn/shop/files/Untitleddesign-2024-03-22T094324.755_64d98e44-6e84-46e8-8385-f6acb6837e9f.png?v=1711108001&width=1946">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        </style>
-                        </head>
-                        <body>
-
-                        <div class="slideshow-container">
-
-                            <div class="mySlides fade">
-                                <div class="title-text">Celotex</div>
-                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/walls_-_external_wall_insulation_-_timber_frame_walls_1.png?v=1737114043&width=1946">
-                            </div>
-                            
-                            <div class="mySlides fade">
-                                <div class="title-text">Recticel</div>
-                                <img src="https://www.building-supplies-online.co.uk/cdn/shop/files/Eurothane_20gp_11_1.jpg">
-                            </div>
-
-                            <div class="mySlides fade">
-                                <div class="title-text">Ecotherm</div>
-                                <img src="//build4less.co.uk/cdn/shop/files/Untitleddesign-2024-03-22T094324.755_64d98e44-6e84-46e8-8385-f6acb6837e9f.png?v=1711108001&width=1946">
-                            </div>
-
-                        </div>
-                        <br>
-
-                        <div style="text-align:center">
-                            <span class="dot"></span> 
-                            <span class="dot"></span> 
-                            <span class="dot"></span> 
-                        </div>
-
-                        <script>
-                        let slideIndex = 0;
-                        showSlides();
-
-                        function showSlides() {
-                            let i;
-                            let slides = document.getElementsByClassName("mySlides");
-                            let dots = document.getElementsByClassName("dot");
-                            for (i = 0; i < slides.length; i++) {
-                                slides[i].style.display = "none";  
-                            }
-                            slideIndex++;
-                            if (slideIndex > slides.length) {slideIndex = 1}    
-                            for (i = 0; i < dots.length; i++) {
-                                dots[i].className = dots[i].className.replace(" active", "");
-                            }
-                            slides[slideIndex-1].style.display = "block";  
-                            dots[slideIndex-1].className += " active";
-                            setTimeout(showSlides, 6000); // Change image every 2 seconds
-                        }
-                        </script>
-
-                        </body>
-                        </html>
-                        """,
-                        height=650,
-                    )
+                                    </body>
+                                    </html>
+                                    """,
+                                    height=600,
+                                )
+                    
             else:
                 st.markdown(
                             """

@@ -98,7 +98,11 @@ if st.session_state.selected_brand:
                     file_data.seek(0)
                     df = load_data(file_data)
                     st.success(f"Successfully loaded: {expected_file_name}")
-                    st.dataframe(df)
+                    columns_config = {
+                                                "Product": st.column_config.Column("Product", pinned=True),
+                                                "SKU": st.column_config.Column("SKU", pinned=True)
+                                            }
+                    st.dataframe(df, column_config=columns_config, hide_index=True, height=600)
 
                     products = df["Product"].unique()
                     st.session_state.selected_product = st.selectbox("Select Product", products)
